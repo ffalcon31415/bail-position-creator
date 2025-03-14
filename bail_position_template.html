@@ -1,0 +1,19 @@
+<span style="display:inline-block;white-space:pre-wrap;">
+<strong>BAIL VETTING</strong>
+<u>{{name}}</u> ({{age}})
+{% if flag %}{{flag}}{% endif %}
+{{boilerplate_table}}
+<div style="border:1px dashed blue;padding:1.5%;"><strong>Crown Position:</strong>
+{% if position not in ['', 'None', None] %}{{ position }}{% endif %}</div>
+{% if publicNotes %}
+<strong>Public Notes (shared with D/C): </strong>
+{{ publicNotes }}{% endif %}{% if notes %}
+
+<strong>Notes for Crown: </strong>
+{{ notes }}
+{% endif %}{% if ("524 after b/w execution" not in charges) and ("Surety revocation warrant executed" not in position) %}
+<strong>Language Rights:</strong>
+Be sure on first appearance that the JP addresses s. 530(3) language rights. If they do not the accused has a presumptive right to a new trial following conviction. Please make a note on scope of 530(3) compliance and ask the clerk to endorse the info accordingly.
+{% endif %}
+<small>Bail package forwarded to duty counsel and the JP mailbox</small>
+</span>
