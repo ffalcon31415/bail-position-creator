@@ -40,35 +40,36 @@ def generate_flag(arrest_time):
         )
 def main():
     st.title("Generate Bail Position HTML")
-    col1, col2, col3 = st.columns(3)
+    ct = st.container(border=True)
+    col1, col2, col3 = ct.columns(3)
     name = col1.text_input("Name of Accused")
     age = col2.text_input("Age")
     charges = col3.text_input("Charges")
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = ct.columns(3)
     onus = col1.text_input("Onus")
     record = col2.text_input("Record")
     outstanding = col3.text_input("Outstanding Charges")
-    col1, col2, col3 = st.columns(3)
-    releases = col1.text_input("Releases")
+    col1, col2, col3 = ct.columns(3)
+    releases = col1.text_input("Existing Releases")
     grounds = col2.text_input("Grounds of Concern")
-    orders = col3.text_input("Orders Requested (516(2), 486.4, etc.)")
-    if st.checkbox("Arrested yesterday?"):
-        arrest_time = st.text_input("Arrest Time")
+    orders = col3.text_input("Orders Requested (e.g. 516(2))")
+    if ct.checkbox("Arrested yesterday?"):
+        arrest_time = ct.text_input("Arrest Time")
     else:
         arrest_time = None
 
-    position = st.text_area("Bail Position",height=200)
-    if st.checkbox("Include Public Notes"):
-        publicNotes = st.text_area("Public Notes", height=100)
+    position = ct.text_area("Bail Position",height=200)
+    if ct.checkbox("Include Public Notes"):
+        publicNotes = ct.text_area("Public Notes", height=100)
     else:
         publicNotes = ""
 
-    if st.checkbox("Include Notes for Crown Only"):
-        notes = st.text_area("Crown Notes", height=100)
+    if ct.checkbox("Include Notes for Crown Only"):
+        notes = ct.text_area("Crown Notes", height=100)
     else:
         notes = ""
-    if st.button("Generate HTML"):
-        st.write("Click the overlapping squares symbol at the top right of the code block to copy the HTML.")
+    wash_or_vettor = ct.radio("Bail Vettor or WASH", ["Bail Vettor", "WASH"])
+    if ct.button("Generate HTML"):
         with open("bail_position_template.html", "r") as f:
             template = jinja2.Template(f.read())
         html = template.render(
@@ -78,11 +79,16 @@ def main():
             position=position,
             notes=notes,
             publicNotes=publicNotes,
-            flag = generate_flag(arrest_time)
+            flag = generate_flag(arrest_time),
+            wash_or_vettor=wash_or_vettor,
         )
-        st.code(html, language="html")
-        st.write("To produce another position, reload the page in your browser.")
-            
+        cont2 = st.container(border=True)
+        cont2.write("### Results below!")
+        cont2.write("Click the overlapping squares symbol at the top right of the code block to copy the HTML.")
+        cont2.code(html, language="html")
+
+        cont2.write("#### To generate another position, reload the page in your browser.")
+          
 
 if __name__ == "__main__":
     main()

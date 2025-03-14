@@ -1,5 +1,5 @@
 <span style="display:inline-block;white-space:pre-wrap;">
-<strong>BAIL VETTING</strong>
+<strong>{% if wash_or_vettor == "WASH" %}WASH POSITION{% else %}BAIL VETTING{% endif%}</strong>
 <u>{{name}}</u> ({{age}})
 {% if flag %}{{flag}}{% endif %}
 {{boilerplate_table}}
