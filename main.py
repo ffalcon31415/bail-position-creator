@@ -41,6 +41,7 @@ def generate_flag(arrest_time):
 def main():
     st.title("Generate Bail Position HTML")
     ct = st.container(border=True)
+    ct.write("Do not input any sensitive or privileged information into this form.")
     col1, col2, col3 = ct.columns(3)
     name = col1.text_input("Name of Accused")
     age = col2.text_input("Age")
@@ -71,6 +72,7 @@ def main():
     wash_or_vettor = ct.radio("Bail Vettor or WASH", ["Bail Vettor", "WASH"])
     if ct.button("Generate HTML"):
         with open("bail_position_template.html", "r") as f:
+
             template = jinja2.Template(f.read())
         html = template.render(
             name=name,
