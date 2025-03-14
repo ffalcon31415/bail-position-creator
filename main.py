@@ -79,8 +79,7 @@ def main():
             flag = generate_flag(arrest_time)
         )
         st.code(html, language="html")
-        if st.button("Reset"):
-            st.experimental_rerun()
+        st.write("To produce another position, reload the page in your browser.")
             
 
 if __name__ == "__main__":
