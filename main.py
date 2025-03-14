@@ -38,7 +38,9 @@ def generate_flag(arrest_time):
                 "<strong>Boilerplate info</strong>",
             ]
         )
+
 def main():
+
     st.title("Generate Bail Position HTML")
     ct = st.container(border=True)
     ct.write("Do not input any sensitive or privileged information into this form.")
