@@ -40,15 +40,16 @@ def generate_flag(arrest_time):
         )
 def main():
     st.title("Generate Bail Position HTML")
-    name = st.text_input("Name")
-    age = st.text_input("Age")
-    charges = st.text_input("Charges")
-    onus = st.text_input("Onus")
-    record = st.text_input("Record")
-    outstanding = st.text_input("Outstanding")
-    releases = st.text_input("Releases")
-    grounds = st.text_input("Grounds")
-    orders = st.text_input("Orders Requested (516(2), 486.4, etc.)")
+    col1, col2, col3 = st.columns(3)
+    name = col1.text_input("Name")
+    age = col1.text_input("Age")
+    charges = col1.text_input("Charges")
+    onus = col2.text_input("Onus")
+    record = col2.text_input("Record")
+    outstanding = col2.text_input("Outstanding")
+    releases = col3.text_input("Releases")
+    grounds = col3.text_input("Grounds")
+    orders = col3.text_input("Orders Requested (516(2), 486.4, etc.)")
     if st.checkbox("Arrested yesterday?"):
         arrest_time = st.text_input("Arrest Time")
     else:
@@ -78,6 +79,8 @@ def main():
             flag = generate_flag(arrest_time)
         )
         st.code(html, language="html")
+        if st.button("Reset"):
+            st.experimental_rerun()
             
 
 if __name__ == "__main__":
