@@ -9,7 +9,7 @@ def table_row(col1: str, col2: str) -> str:
     return f"<tr><td>{col1}</td><td>{if_none(col2)}</td></tr>"
 
 
-def generate_boilerplate_table(charges, onus, record, outstanding, releases, grounds, orders):
+def generate_boilerplate_table(charges, onus, record, outstanding, releases, grounds, orders, needs_524):
     boilerplate_table = (
         "<style>td:first-child {min-width: 95px;font-style:italic;} td {vertical-align:top;}</style><table>"
     )
@@ -22,6 +22,8 @@ def generate_boilerplate_table(charges, onus, record, outstanding, releases, gro
     boilerplate_table += table_row("Grounds:", grounds)
     if orders:
         boilerplate_table += table_row("Orders:", orders)
+    if needs_524:
+        boilerplate_table += table_row("Do 524:","Yes")
     boilerplate_table += "</table>"
     return boilerplate_table
 
@@ -44,7 +46,7 @@ def main():
     st.title("Generate Bail Position HTML")
     st.write("Do not input any sensitive or privileged information into this form.")
     ct = st.container(border=True)
-    
+
     col1, col2, col3 = ct.columns(3)
     name = col1.text_input("Name of Accused")
     age = col2.text_input("Age")
@@ -61,7 +63,7 @@ def main():
         arrest_time = ct.text_input("Arrest Time")
     else:
         arrest_time = None
-
+    needs_524 = ct.checkbox("Do 524")
     position = ct.text_area("Bail Position",height=200)
     if ct.checkbox("Include Public Notes"):
         publicNotes = ct.text_area("Public Notes", height=100)
@@ -80,12 +82,13 @@ def main():
         html = template.render(
             name=name,
             age=age,
-            boilerplate_table = generate_boilerplate_table(charges, onus, record, outstanding, releases, grounds, orders),
+            boilerplate_table = generate_boilerplate_table(charges, onus, record, outstanding, releases, grounds, orders, needs_524=needs_524),
             position=position,
             notes=notes,
             publicNotes=publicNotes,
             flag = generate_flag(arrest_time),
             wash_or_vettor=wash_or_vettor,
+
         )
         cont2 = st.container(border=True)
         cont2.write("### Results below!")
@@ -93,7 +96,7 @@ def main():
         cont2.code(html, language="html")
 
         cont2.write("#### To generate another position, reload the page in your browser.")
-          
+
 
 if __name__ == "__main__":
     main()
