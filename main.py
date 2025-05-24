@@ -59,11 +59,13 @@ def main():
     releases = col1.text_input("Existing Releases")
     grounds = col2.text_input("Grounds of Concern")
     orders = col3.text_input("Orders Requested (e.g. 516(2))")
+    uploaded = ct.checkbox("Bail brief emailed to dcc.brampton@lao.on.ca and bramptonbail@ontario.ca?")
+
     if ct.checkbox("Arrested yesterday?"):
         arrest_time = ct.text_input("Arrest Time")
     else:
         arrest_time = None
-    needs_524 = ct.checkbox("Do 524")
+    needs_524 = ct.checkbox("Do 524?")
     position = ct.text_area("Bail Position",height=200)
     if ct.checkbox("Include Public Notes"):
         publicNotes = ct.text_area("Public Notes", height=100)
@@ -88,6 +90,7 @@ def main():
             publicNotes=publicNotes,
             flag = generate_flag(arrest_time),
             wash_or_vettor=wash_or_vettor,
+            uploaded=uploaded,
 
         )
         cont2 = st.container(border=True)
