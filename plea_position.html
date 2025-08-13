@@ -1,0 +1,17 @@
+<span> <strong>Early plea position for {{ plea_position.name }}</strong>
+    <small>Below position takes into account COVID-19 considerations.</small><br>    {{ vis }}
+    <Strong>Conditions under which below position remains valid:</strong>
+    <ul><li>Plea is entered promptly (as determined in the Crown's discretion) and in any case prior to applying for bail
+        <li>The accused has not been charged or convicted of any further offences that either pre-date or post-date the offence(s) below subsequent to the Crown taking this position
+        <li>No further significant (in the crown's view) aggravating factors come to light about the offence(s) below
+        <li>No further or unexpected injury, harm, or loss to the victim(s) than currently known to the Crown, resulting from the below offence(s)
+        <li>Victim input does not reveal unexpectedly great impact
+        <li>All facts are admitted as correct as alleged in the synopses disclosed, or in any updated statement of allegations provided by the Crown to defence, subject to any exceptions noted below
+        <li>The criminal record (if any) alleged by the crown is admitted including, where appropriate, notice that increased penalty will be sought. Take notice here that (unless otherwise specified below) increased penalty will be sought as a result of the criminal record wherever it is available under statute.
+        <li>Subject to internal approval within the Crown Attorney's Office or the Ministry of the Attorney General
+    </ul>
+    <strong>Plea to the following count(s)</strong> on the following scope number(s). The facts for the remaining count(s) (if any) on these scope number(s) are to be read in and admitted as aggravating on the sentencing, as per <em>Garcia and Silva</em>, then the corresponding count(s) are to be withdrawn following the sentencing, aside from any exceptions noted below.<br>
+    {{ html_table }}
+    <strong>Crown election: </strong>{{ plea_position.election }}{{ additional_facts }}
+    <div style="border:1px dashed blue;padding:1%;"><strong>Crown plea position: </strong>(open position unless otherwise specified)<br>{{ plea_position.position }}</div>{{ miscellaneous_notes }}
+</span>
