@@ -109,7 +109,7 @@ def main():
     )
     st.write("## Counts for Plea")
     st.write(
-        "Enter the scope numbers and counts for plea. Leave blank if the accused is not pleading guilty to any counts.")
+        "Enter the scope numbers and counts for plea. Leave counts blank if the accused is not pleading guilty to any counts.")
     edited_df = st.data_editor(
         df,
         num_rows="dynamic",
@@ -125,7 +125,7 @@ def main():
                 
             ),
             "Counts for Plea": st.column_config.TextColumn(
-                "Counts the accused will plead guilty to (if any)",
+                "Counts for Plea",
                 help="Enter the counts for plea corresponding to each scope number. Other counts will be read in and withdrawn, unless otherwise specified.",
                 width="large",
             ),
@@ -133,7 +133,7 @@ def main():
     )
     st.write("## Crown Plea Position")
     st.write(
-        "Enter the Crown's plea position. Open position unless otherwise specified."
+        "Enter the Crown's plea position, including all ancillary orders sought. Open position unless otherwise specified."
     )
     position = st.text_area(
         "## Crown Plea Position",

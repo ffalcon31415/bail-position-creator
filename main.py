@@ -77,7 +77,7 @@ def main():
     else:
         notes = ""
     wash_or_vettor = ct.radio("Bail Vettor or WASH", ["Bail Vettor", "WASH"])
-    if ct.button("Generate Position"):
+    if ct.button("Generate Position HTML"):
         with open("bail_position_template.html", "r") as f:
 
             template = jinja2.Template(f.read())
