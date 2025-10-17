@@ -46,7 +46,7 @@ def main():
     st.title("Generate Bail Position HTML")
     st.write("Do not input any sensitive or privileged information into this form.")
     ct = st.container(border=True)
-
+    
     col1, col2, col3 = ct.columns(3)
     name = col1.text_input("Name of Accused")
     age = col2.text_input("Age")
@@ -56,7 +56,7 @@ def main():
     record = col2.text_input("Record")
     outstanding = col3.text_input("Outstanding Charges")
     col1, col2, col3 = ct.columns(3)
-    releases = col1.text_input("Existing Release(s)")
+    releases = col1.text_input("Existing Releases")
     grounds = col2.text_input("Grounds of Concern")
     orders = col3.text_input("Orders Requested (e.g. 516(2))")
     uploaded = ct.checkbox("Bail brief emailed to dcc.brampton@lao.on.ca and bramptonbail@ontario.ca?")
@@ -77,7 +77,7 @@ def main():
     else:
         notes = ""
     wash_or_vettor = ct.radio("Bail Vettor or WASH", ["Bail Vettor", "WASH"])
-    if ct.button("Generate Position"):
+    if ct.button("Generate HTML"):
         with open("bail_position_template.html", "r") as f:
 
             template = jinja2.Template(f.read())
@@ -99,7 +99,7 @@ def main():
         cont2.code(html, language="html")
 
         cont2.write("#### To generate another position, reload the page in your browser.")
-
+          
 
 if __name__ == "__main__":
     main()
