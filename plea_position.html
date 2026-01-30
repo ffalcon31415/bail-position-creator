@@ -1,7 +1,7 @@
 <span> <strong>Early plea position for {{ plea_position.name }}</strong>
     <small>Below position takes into account COVID-19 considerations.</small><br>    {{ vis }}
     <Strong>Conditions under which below position remains valid:</strong>
-    <ul><li>Plea is entered promptly (as determined in the Crown's discretion) and in any case prior to applying for bail
+    <ul><li>{%if plea_position.deadline %}Deadline for plea: {{plea_position.deadline}}{% else %}Plea is entered promptly (as determined in the Crown's discretion) and in any case prior to applying for bail{% endif %}
         <li>The accused has not been charged or convicted of any further offences that either pre-date or post-date the offence(s) below subsequent to the Crown taking this position
         <li>No further significant (in the crown's view) aggravating factors come to light about the offence(s) below
         <li>No further or unexpected injury, harm, or loss to the victim(s) than currently known to the Crown, resulting from the below offence(s)
