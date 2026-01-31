@@ -107,6 +107,7 @@ def main():
             "Counts for Plea": ["",],
         }
     )
+    st.divider()
     st.write("## Counts for Plea")
     st.write("Enter the scope numbers and counts for plea.")
     st.write("Leave blank the counts in a row if the accused is not pleading guilty to any counts and all are being read in as aggravating.")
@@ -131,6 +132,7 @@ def main():
             ),
         },
     )
+    st.divider()
     st.write("## Crown Plea Position")
     st.write(
         "Enter the Crown's plea position. Open position unless otherwise specified."
