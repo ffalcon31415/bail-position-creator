@@ -108,8 +108,8 @@ def main():
         }
     )
     st.write("## Counts for Plea")
-    st.write(
-        "Enter the scope numbers and counts for plea.\nLeave blank if the accused is not pleading guilty to any counts and all are being read in as aggravating.")
+    st.write("Enter the scope numbers and counts for plea.")
+    st.write("Leave blank if the accused is not pleading guilty to any counts and all are being read in as aggravating.")
     edited_df = st.data_editor(
         df,
         num_rows="dynamic",
