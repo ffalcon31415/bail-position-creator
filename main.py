@@ -14,14 +14,14 @@ def generate_boilerplate_table(charges, onus, record, outstanding, releases, gro
         "<style>td:first-child {min-width: 95px;font-style:italic;} td {vertical-align:top;}</style><table>"
     )
     boilerplate_table += table_row("Charges:", charges.replace("\n", ";"))
-    boilerplate_table += table_row("Onus:", onus)
     boilerplate_table += table_row("Record:  ", record)
     boilerplate_table += table_row("O/S Charges:", outstanding)
-    if releases:
-        boilerplate_table += table_row("Releases:", releases)
-    boilerplate_table += table_row("Grounds:", grounds)
     if orders:
         boilerplate_table += table_row("Orders:", orders)
+    if releases:
+        boilerplate_table += table_row("Releases:", releases)
+    boilerplate_table += table_row("Onus:", onus)
+    boilerplate_table += table_row("Grounds:", grounds)
     if needs_524:
         boilerplate_table += table_row("Do 524:","Yes")
     boilerplate_table += "</table>"
