@@ -4,6 +4,8 @@ import dataclasses
 import pandas as pd
 from pathlib import Path
 
+st.set_page_config(page_title="Plea Position")
+
 
 @dataclasses.dataclass
 class PleaPosition:
@@ -84,84 +86,92 @@ def generate_plea_position_html(plea_position: PleaPosition) -> str:
 
 
 def main():
-    st.title("Generate Plea Position")
+    st.title("Generate Plea Position HTML")
     st.write(
         "Do not input any sensitive or privileged information into this form. This app is not secure."
     )
-    name = st.text_input("Name of Accused")
-    election = st.radio("Election:",["Summary", "Indictable"])
-    visRequired = st.checkbox("VIS Required?", value=True)
-    if st.checkbox("Include deadline for plea?"):
-        deadline = st.text_input(
+    ct = st.container(border=True)
+
+    name = ct.text_input("Name of Accused")
+    election = ct.radio("Election:", ["Summary", "Indictable"])
+    visRequired = ct.checkbox("VIS Required?", value=True)
+    if ct.checkbox("Include deadline for plea?"):
+        deadline = ct.text_input(
             "Deadline for plea",
             help="Enter the deadline for the plea offer, if applicable.",
-        )       
+        )
     else:
         deadline = None
+    ct.write("## Counts for Plea")
+    
+    num_scope_numbers = ct.number_input("How many scope files?", min_value=1, value=1)
     df = pd.DataFrame(
         {
-            "Scope Number": [
-                "",
-                
-            ],
-            "Counts for Plea": ["",],
+            "Scope Number": [""] * num_scope_numbers,
+            "Counts for Plea": [""] * num_scope_numbers,
         }
     )
-    st.write("## Counts for Plea")
-    st.write(
-        "Enter the scope numbers and counts for plea. Leave counts blank if the accused is not pleading guilty to any counts.")
-    edited_df = st.data_editor(
+    
+    ct.write(
+        "Enter the scope numbers and counts for plea. Leave counts blank if the accused is not pleading guilty to any counts on a particular scope file."
+    )
+    edited_df = ct.data_editor(
         df,
-        num_rows="dynamic",
+        num_rows="fixed",
         hide_index=True,
         use_container_width=True,
-
         column_config={
             "Scope Number": st.column_config.TextColumn(
-                "Scope Number", 
+                "Scope Number",
                 help="Enter the scope number for each count.",
                 max_chars=10,
                 width="small",
-                
+                required=True,
             ),
             "Counts for Plea": st.column_config.TextColumn(
                 "Counts for Plea",
                 help="Enter the counts for plea corresponding to each scope number. Other counts will be read in and withdrawn, unless otherwise specified.",
                 width="large",
+                default="Read in and withdraw as above",
+                
             ),
         },
     )
-    st.write("## Crown Plea Position")
-    st.write(
+    scope_numbers=[str(x) for x in edited_df["Scope Number"].tolist()]
+    counts=[
+            str(x) if str(x) else "Read in and withdraw as above"
+            for x in edited_df["Counts for Plea"].tolist()
+        ]
+        
+    ct.write("## Crown Plea Position")
+    ct.write(
         "Enter the Crown's plea position, including all ancillary orders sought. Open position unless otherwise specified."
     )
-    position = st.text_area(
+    position = ct.text_area(
         "## Crown Plea Position",
         height=200,
         value="Credit for time served to be noted at 1.5:1.\n",
         help="Enter the Crown's plea position. Open position unless otherwise specified.",
     )
 
-
-    if st.checkbox("Include additional facts to be admitted?"):
-        additionalFacts = st.text_area(
+    if ct.checkbox("Include additional facts to be admitted?"):
+        additionalFacts = ct.text_area(
             "Additional Facts to be Admitted",
             height=100,
         )
     else:
         additionalFacts = ""
-    if st.checkbox("Include Notes for Crown Only"):
-        crownNotes = st.text_area("Crown Notes", height=100)
+    if ct.checkbox("Include Notes for Crown Only"):
+        crownNotes = ct.text_area("Crown Notes", height=100)
     else:
         crownNotes = ""
 
-    ct = st.container(border=True)
     plea_position = PleaPosition(
         name=name,
         # Convert to string to avoid NoneType issues in rendering
         # This is a workaround for the dataclass not accepting None as a default value
-        scopeNumbers=[str(x) for x in edited_df["Scope Number"].tolist()],
-        counts=[str(x) if str(x) else "Read in and withdraw as above" for x in edited_df["Counts for Plea"].tolist()],
+        scopeNumbers=scope_numbers,
+        counts=counts,
         election=election,
         visRequired=visRequired,
         additionalFacts=additionalFacts,
@@ -173,15 +183,20 @@ def main():
     if ct.button("Generate Position"):
         html = generate_plea_position_html(plea_position)
         cont2 = st.container(border=True)
-        cont2.write("### Results below!")
-        cont2.write(
+        st.write("### Results")
+        st.write(
+            "##### Preview of results below. If you're happy with the results, copy the HTML code down at the bottom and paste into SCOPE."
+        )
+        st.write("##### Otherwise, make edits above and submit again.")
+        st.write("##### To generate another position, reload the page in your browser.")
+
+        cont2.html(html.replace("\n", "<br>"))
+        cont3 = st.container(border=True)
+        cont3.write("### HTML Code")
+        cont3.write(
             "Click the overlapping squares symbol at the top right of the code block to copy the HTML."
         )
-        cont2.code(html, language="html")
-
-        cont2.write(
-            "#### To generate another position, reload the page in your browser."
-        )
+        cont3.code(html, language="html")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Stlite App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@stlite/browser@0.85.1/build/stlite.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@stlite/browser@0.85.1/build/stlite.js"
+    ></script>
+  </head>
+  <body>
+    <streamlit-app>
+import streamlit as st
+
+
+def if_none(s):
+    return "" if (not s or s in ["", "None", None]) else str(s)
+
+
+def table_row(col1: str, col2: str) -&gt; str:
+    return f"&lt;tr&gt;&lt;td&gt;{col1}&lt;/td&gt;&lt;td&gt;{if_none(col2)}&lt;/td&gt;&lt;/tr&gt;"
+
+
+def generate_boilerplate_table(
+    charges, onus, record, outstanding, releases, grounds, orders, needs_524
+):
+    boilerplate_table = "&lt;style&gt;td:first-child {min-width: 95px;font-style:italic;} td {vertical-align:top;}&lt;/style&gt;&lt;table&gt;"
+    boilerplate_table += table_row("Charges:", charges.replace("\n", ";"))
+    boilerplate_table += table_row("Record:  ", record)
+    boilerplate_table += table_row("O/S Charges:", outstanding)
+    if releases:
+        boilerplate_table += table_row("Releases:", releases)
+    if orders:
+        boilerplate_table += table_row("Orders:", orders)
+    boilerplate_table += table_row("Grounds:", grounds)
+    boilerplate_table += table_row("Onus:", onus)
+    if needs_524:
+        boilerplate_table += table_row("Do 524:", "Yes")
+    boilerplate_table += "&lt;/table&gt;"
+    return boilerplate_table
+
+def generate_flag(arrest_time):
+    if not arrest_time:
+        return
+    return "".join(
+        [
+            "\n&lt;strong&gt;Section 503 compliance&lt;/strong&gt;",
+            "&lt;div style=\&quot;border:1px dotted red;padding:1.5%;\&quot;&gt;",
+            f"This accused was arrested yesterday at &lt;b&gt;{arrest_time}&lt;/b&gt;.\n",
+            "They &lt;i&gt;must&lt;/i&gt; appear before a justice &lt;i&gt;before&lt;/i&gt; that time today, to comply with s. 503.",
+            "&lt;/div&gt;\n",
+            "&lt;strong&gt;Boilerplate info&lt;/strong&gt;",
+        ]
+    )
+
+
+st.title("Generate Bail Position HTML")
+st.write("Do not input any sensitive or privileged information into this form.")
+
+
+col1, col2, col3 = st.columns(3)
+name = col1.text_input("Name of Accused")
+age = col2.text_input("Age")
+charges = col3.text_input("Charges")
+col1, col2, col3 = st.columns(3)
+onus = col1.text_input("Onus")
+record = col2.text_input("Record")
+outstanding = col3.text_input("Outstanding Charges")
+col1, col2, col3 = st.columns(3)
+releases = col1.text_input("Existing Release(s)")
+grounds = col2.text_input("Grounds of Concern")
+orders = col3.text_input("Orders Requested (e.g. 516(2))")
+uploaded =st.checkbox(
+    "Bail brief emailed to dcc.brampton@lao.on.ca and bramptonbail@ontario.ca?"
+)
+
+if st.checkbox("Arrested yesterday?"):
+    arrest_time = st.text_input("Arrest Time")
+else:
+    arrest_time = None
+needs_524 = st.checkbox("Do 524?")
+position = st.text_area("Bail Position", height=200)
+if st.checkbox("Include Public Notes"):
+    publicNotes = st.text_area("Public Notes", height=100)
+else:
+    publicNotes = ""
+
+if st.checkbox("Include Notes for Crown Only"):
+    notes = st.text_area("Crown Notes", height=100)
+else:
+    notes = ""
+wash_or_vettor = st.radio("Bail Vettor or WASH", ["Bail Vettor", "WASH"])
+flag = generate_flag(arrest_time)
+
+if st.button("Generate Position HTML"):
+    
+    st.write("### Results")
+    st.write(
+        "##### Preview of results below. If you're happy with the results, copy the HTML code down at the bottom and paste into SCOPE."
+    )
+    st.write("##### Otherwise, make edits above and submit again.")
+    st.write("##### To generate another position, reload the page in your browser.")
+    
+    boilerplate_table=generate_boilerplate_table(
+                    charges,
+                    onus,
+                    record,
+                    outstanding,
+                    releases,
+                    grounds,
+                    orders,
+                    needs_524=needs_524,
+                )
+    html = f"""&lt;span style=&quot;display:inline-block;white-space:pre-wrap;&quot;&gt;
+&lt;strong&gt;{"WASH POSITION" if wash_or_vettor == "WASH" else "BAIL VETTING"}&lt;/strong&gt;
+&lt;u&gt;{name}&lt;/u&gt; ({age})
+{flag if flag else ""}
+{boilerplate_table}
+&lt;div style=&quot;border:1px dashed blue;padding:1.5%;&quot;&gt;&lt;strong&gt;Crown Position:&lt;/strong&gt;
+{position}&lt;/div&gt;
+{"&lt;strong&gt;Public Notes (shared with D/C): &lt;/strong&gt;&lt;br&gt;" + publicNotes + "&lt;BR&gt;&lt;BR&gt;" if publicNotes else ""}
+{"&lt;strong&gt;Notes for Crown: &lt;/strong&gt;&lt;br&gt;" + notes + "&lt;BR&gt;&lt;BR&gt;" if notes else ""}
+&lt;br&gt;&lt;br&gt;
+&lt;strong&gt;Language Rights:&lt;/strong&gt;
+Be sure on first appearance that the JP addresses s. 530(3) language rights. If they do not the accused has a presumptive right to a new trial following conviction. Please make a note on scope of 530(3) compliance and ask the clerk to endorse the info accordingly.
+{"&lt;small&gt;Bail package forwarded to duty counsel and the JP mailbox&lt;/small&gt;" if uploaded else ""}
+&lt;/span&gt;"""
+
+    
+    
+
+    
+  
+    
+    st.html(html)
+    st.write("### HTML Code")
+    st.write(
+        "Click the overlapping squares symbol at the top right of the code block to copy the HTML."
+    )
+    st.code(html, language="html")
+
+
+
+    </streamlit-app>
+  </body>
+</html>
