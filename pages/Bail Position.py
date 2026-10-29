@@ -18,14 +18,14 @@ def generate_boilerplate_table(
 ):
     boilerplate_table = "<style>td:first-child {min-width: 95px;font-style:italic;} td {vertical-align:top;}</style><table>"
     boilerplate_table += table_row("Charges:", charges.replace("\n", ";"))
-    boilerplate_table += table_row("Onus:", onus)
     boilerplate_table += table_row("Record:  ", record)
     boilerplate_table += table_row("O/S Charges:", outstanding)
-    if releases:
-        boilerplate_table += table_row("Releases:", releases)
-    boilerplate_table += table_row("Grounds:", grounds)
     if orders:
         boilerplate_table += table_row("Orders:", orders)
+    if releases:
+        boilerplate_table += table_row("Releases:", releases)
+    boilerplate_table += table_row("Onus:", onus)
+    boilerplate_table += table_row("Grounds:", grounds)
     if needs_524:
         boilerplate_table += table_row("Do 524:", "Yes")
     boilerplate_table += "</table>"
@@ -51,7 +51,7 @@ def main():
     st.title("Generate Bail Position HTML")
     st.write("Do not input any sensitive or privileged information into this form.")
     ct = st.container(border=True)
-
+    
     col1, col2, col3 = ct.columns(3)
     name = col1.text_input("Name of Accused")
     age = col2.text_input("Age")
@@ -61,7 +61,7 @@ def main():
     record = col2.text_input("Record")
     outstanding = col3.text_input("Outstanding Charges")
     col1, col2, col3 = ct.columns(3)
-    releases = col1.text_input("Existing Release(s)")
+    releases = col1.text_input("Existing Releases")
     grounds = col2.text_input("Grounds of Concern")
     orders = col3.text_input("Orders Requested (e.g. 516(2))")
     uploaded = ct.checkbox(
